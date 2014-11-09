@@ -1,6 +1,5 @@
 language: java
 
 after_success:
-  - cd ../core/model
-  - mvn jacoco:report coveralls:report
+  - mvn clean test jacoco:report coveralls:report
 
