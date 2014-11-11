@@ -23,11 +23,17 @@ public class VariableLengthString {
 	
 	public void setValue(String value) {
 		if(value.length() < 0xfd) {
-			this.value8 = value;
+			value8 = value;
+			value16 = null;
+			value32 = null;
 		} else if(value.length() <= 0xffff) {
-			this.value16 = value;
+			value16 = value;
+			value8 = null;
+			value32 = null;
 		} else {
-			this.value32 = value;
+			value32 = value;
+			value8 = null;
+			value16 = null;
 		}
 		
 		this.length = new VariableLengthInteger();
@@ -36,11 +42,11 @@ public class VariableLengthString {
 	
 	public String getValue() {
 		if(length.getValue() < 0xfd) {
-			return this.value8;
+			return value8;
 		} else if(length.getValue() <= 0xffff) {
-			return this.value16;
+			return value16;
 		} else {
-			return this.value32;
+			return value32;
 		}
 	}
 }
