@@ -158,4 +158,12 @@ public class TestVariableLengthInteger {
 	public void testDeserializeInt32() throws IOException, DecodingException, DecoderException {
 		Assert.assertEquals(66536l, variableLengthIntegerForHex("fe000103e8").getValue());
 	}
+	
+	@Test
+	public void testSerialize0() throws IOException {
+		VariableLengthInteger variableLengthInteger = new VariableLengthInteger();
+		variableLengthInteger.setValue(0);
+		Assert.assertEquals("00", hexForVariableLengthInteger(variableLengthInteger));
+	}
+	
 }
