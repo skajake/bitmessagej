@@ -1,4 +1,4 @@
-package org.bitmessage.model;
+package org.bitmessagej.model;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

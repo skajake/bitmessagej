@@ -1,4 +1,4 @@
-package org.bitmessage.model;
+package org.bitmessagej.model;
 
 import org.codehaus.preon.annotation.BoundNumber;
 import org.codehaus.preon.annotation.If;
