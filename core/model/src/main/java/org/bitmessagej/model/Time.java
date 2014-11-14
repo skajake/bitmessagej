@@ -23,7 +23,7 @@ public class Time {
 	}
 	
 	public void setDate(Date date) {
-		this.value = date.getTime();
+		setValue(date.getTime());
 	}
 	
 	public Date getDate() {
