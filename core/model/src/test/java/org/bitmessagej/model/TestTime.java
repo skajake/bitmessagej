@@ -20,7 +20,7 @@ import org.junit.Test;
 
 public class TestTime {
 
-private static Codec<Time> codec;
+	private static Codec<Time> codec;
 	
 	@BeforeClass
 	public static void init() {
