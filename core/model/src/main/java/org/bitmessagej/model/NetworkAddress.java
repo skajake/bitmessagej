@@ -1,6 +1,7 @@
 package org.bitmessagej.model;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -30,22 +31,28 @@ public class NetworkAddress {
 	@BoundNumber(byteOrder=ByteOrder.BigEndian, size="16")
 	private Integer portNumber;
 	
-	private static byte[] prefix;
+	private byte[] prefix;
 	
 	public NetworkAddress() {
-		
-		Codec<Ipv4Prefix> prefixCodec = Codecs.create(Ipv4Prefix.class);
+		prefix = createPrefix();
+		setServices(1l);
+		setStreamNumber(1L);
+	}
+	
+	protected byte[] createPrefix() {
+		Codec<Ipv4Prefix> prefixCodec = createIpv4PrefixCodec();
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		BitChannel channel = new OutputStreamBitChannel(buffer);
 		try {
 			prefixCodec.encode(new Ipv4Prefix(), channel, null);
-			prefix = buffer.toByteArray();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
-		setServices(1l);
-		setStreamNumber(1L);
+		return buffer.toByteArray();
+	}
+	
+	protected Codec<Ipv4Prefix> createIpv4PrefixCodec() {
+		return Codecs.create(Ipv4Prefix.class);
 	}
 	
 	public Time getTime() {

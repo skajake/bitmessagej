@@ -1,5 +1,7 @@
 package org.bitmessagej.model;
 
+import static org.mockito.Matchers.any;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -14,12 +16,16 @@ import org.codehaus.preon.Codec;
 import org.codehaus.preon.Codecs;
 import org.codehaus.preon.DecodingException;
 import org.codehaus.preon.DefaultBuilder;
+import org.codehaus.preon.Resolver;
 import org.codehaus.preon.buffer.DefaultBitBuffer;
 import org.codehaus.preon.channel.BitChannel;
 import org.codehaus.preon.channel.OutputStreamBitChannel;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public class TestNetworkAddress {
 
@@ -93,4 +99,29 @@ public class TestNetworkAddress {
 		Assert.assertEquals(new Long(1l), networkAddress.getStreamNumber());
 		Assert.assertEquals(new Long(1l), networkAddress.getServices());
 	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testFailedToCreatePrefix() throws IOException {
+		NetworkAddress networkAddress = new NetworkAddress();
+		networkAddress = Mockito.spy(networkAddress);
+		Mockito.doAnswer(new Answer<Codec<Ipv4Prefix>>() {
+
+			@Override
+			public Codec<Ipv4Prefix> answer(InvocationOnMock invocation) throws Throwable {
+				Codec<Ipv4Prefix> codec = Codecs.create(Ipv4Prefix.class);
+				codec = Mockito.spy(codec);
+				Mockito.doAnswer(new Answer<Void>() {
+
+					@Override
+					public Void answer(InvocationOnMock invocation)
+							throws Throwable {
+						throw new IOException("test");
+					}
+				}).when(codec).encode(any(Ipv4Prefix.class), any(BitChannel.class), any(Resolver.class));
+				return codec;
+			}
+		}).when(networkAddress).createIpv4PrefixCodec();
+		networkAddress.createPrefix();
+	}
+	
 }
