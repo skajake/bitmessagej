@@ -5,12 +5,5 @@
     <artifactId>core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>model</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.bitmessagej</groupId>
-  		<artifactId>utils</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+  <artifactId>utils</artifactId>
 </project>
